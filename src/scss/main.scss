@@ -1,0 +1,13 @@
+@import 'config', 'variables', 'navigation', 'controls','table';
+@import url($google-font);
+
+
+body{
+    font-family: 'Red Hat Display', sans-serif;
+}
+
+.container{
+    margin: 0 auto;
+    max-width: 75rem;
+    padding: 0 20px;
+}

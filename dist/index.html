@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/main.css">
+    <title>Countries API</title>
+</head>
+<body>
+    <header>
+        <nav class="nav">
+            <h2 class="nav__title container">Countries Api</h2>
+        </nav>
+    </header>
+    <main class="container">
+        <section class="controls">
+            <div>
+                <button class="controls__btn" id="previous">Previous</button>
+                <button class="controls__btn" id="next">Next</button>
+            </div>
+            <input type="text" class="controls__search" placeholder="Search country">
+            <div>
+                <input type="checkbox" name="order" id="order-ch" class="controls__order">
+                <label for="order">Order</label>
+            </div>
+        </section>
+        <section class="table">
+            <table>
+                <thead>
+                    <th>Official Name</th>
+                    <th>Capital</th>
+                    <th>Region</th>
+                    <th>Language</th>
+                    <th>Population</th>
+                    <th>Flag</th>
+                </thead>
+                <tbody id="data"></tbody>
+            </table>
+        </section>
+    </main>
+
+    <script src="bundle.js"></script>
+</body>
+</html>
