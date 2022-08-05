@@ -543,54 +543,37 @@ var elementsPerPage = 25;
 var previous_btn = document.getElementById('previous');
 var next_btn = document.getElementById('next');
 var toggle = document.getElementById('toggle');
+var search_bar = document.getElementById('search_bar');
 //* Consuming API
 fetch("".concat(API_URL))
     .then(function (response) { return response.json(); })
     .then(function (data) {
-    data.sort(function (a, b) {
-        if (a.name.official > b.name.official) {
-            return 1;
-        }
-        if (a.name.official < b.name.official) {
-            return -1;
-        }
-        return 0;
-    });
+    var asc = function (a, b) { return a.name.official.localeCompare(b.name.official); };
+    var des = function (a, b) { return b.name.official.localeCompare(a.name.official); };
+    data.sort(asc);
     createTable(data);
+    search_bar.addEventListener('keyup', function (e) {
+        var value = search_bar.value;
+        var country = searchCountry(value, data);
+        createTable(country);
+    });
     toggle.addEventListener('click', function (e) {
         if (toggle.value === 'Ascending Mode') {
             toggle.textContent = 'Descending Mode';
             toggle.value = 'Descending Mode';
-            data.sort(function (a, b) {
-                if (a.name.official > b.name.official) {
-                    return 1;
-                }
-                if (a.name.official < b.name.official) {
-                    return -1;
-                }
-                return 0;
-            });
+            data.sort(asc);
             createTable(data);
         }
         else if (toggle.value === 'Descending Mode') {
             toggle.textContent = 'Ascending Mode';
             toggle.value = 'Ascending Mode';
-            data.sort(function (a, b) {
-                if (b.name.official > a.name.official) {
-                    return 1;
-                }
-                if (b.name.official < a.name.official) {
-                    return -1;
-                }
-                return 0;
-            });
+            data.sort(des);
             createTable(data);
         }
     });
     next_btn.addEventListener('click', function (e) {
+        initialIndex = elementsPerPage;
         elementsPerPage += 25;
-        console.log(initialIndex);
-        console.log(elementsPerPage);
         createTable(data);
         if (elementsPerPage === 250) {
             next_btn.disabled = true;
@@ -599,13 +582,15 @@ fetch("".concat(API_URL))
     });
     previous_btn.addEventListener('click', function (e) {
         if (initialIndex === 0) {
+            initialIndex = 0;
             previous_btn.disabled = true;
             previous_btn.style.cursor = "no-drop";
         }
         else {
             initialIndex -= 25;
+            elementsPerPage -= 25;
+            createTable(data);
         }
-        createTable(data);
     });
 });
 /**
@@ -675,6 +660,23 @@ function getCapital(capital) {
  */
 function getLanguage(languages) {
     return languages ? Object.values(languages) : "No language";
+}
+/**
+ *
+ * @param value
+ * @param data
+ * @returns
+ */
+function searchCountry(value, data) {
+    var filterData = [];
+    for (var index = 0; index < data.length; index++) {
+        value = value.toLowerCase();
+        var country = data[index].name.official.toLowerCase();
+        if (country.includes(value)) {
+            filterData.push(data[index]);
+        }
+    }
+    return filterData;
 }
 
 })();

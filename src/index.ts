@@ -12,6 +12,29 @@ const previous_btn = document.getElementById('previous') as HTMLButtonElement;
 const next_btn = document.getElementById('next') as HTMLButtonElement;
 const toggle = document.getElementById('toggle') as HTMLButtonElement;
 const search_bar = document.getElementById('search_bar') as HTMLInputElement;
+const data = document.getElementById('data') as HTMLElement;
+
+let countries = [];
+
+window.addEventListener('DOMContentLoaded', async () =>{
+    const data = await loadInformationCountries();
+    renderTable(data.data);
+})
+
+async function loadInformationCountries() {
+    const response = await fetch(`${API_URL}`)
+    return await response.json();
+}
+
+const createRowCountry = (countries: any[]) => countries.map((country: any) =>
+    '<li>hello</li>'
+)
+
+function renderTable(countries:any){
+    const newElement = createRowCountry(countries);
+    data.innerHTML = newElement;
+}
+
 
 //* Consuming API
 fetch(`${API_URL}`)
@@ -24,6 +47,12 @@ fetch(`${API_URL}`)
         data.sort(asc);
 
         createTable(data);
+
+        search_bar.addEventListener('keyup',(e)=>{
+            let value = search_bar.value;
+            let country = searchCountry(value, data);
+            createTable(country);
+        });
 
         toggle.addEventListener('click',(e)=>{
             if(toggle.value === 'Ascending Mode'){
@@ -114,8 +143,6 @@ function createModal(){
  * @param countries Information of countries.
  */
 function createTable(countries:any):void{
-
-
     let body:string = '';
 
     for(let i = initialIndex; i < elementsPerPage; i++){
@@ -153,4 +180,24 @@ function getCapital(capital:string):string{
  */
 function getLanguage(languages:any): unknown[] | string{
     return languages ? Object.values(languages) : "No language";
+}
+
+/**
+ * 
+ * @param value 
+ * @param data 
+ * @returns 
+ */
+function searchCountry(value:any, data:any): any[]{
+    let filterData = [];
+    for (let index = 0; index < data.length; index++) {
+        value = value.toLowerCase();
+        let country = data[index].name.official.toLowerCase();
+
+        if(country.includes(value)){
+            filterData.push(data[index]);
+        }
+    }
+
+    return filterData;
 }
