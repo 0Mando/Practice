@@ -18,15 +18,10 @@ fetch(`${API_URL}`)
     .then(response => response.json())
     .then(data => {
 
-        data.sort((a:any, b:any)=>{
-            if(a.name.official > b.name.official){
-                return 1;
-            }
-            if(a.name.official < b.name.official){
-                return -1;
-            }
-            return 0;
-        });
+        const asc = (a:any, b:any) => (a.name.official as string).localeCompare(b.name.official);
+        const des = (a:any, b:any) => (b.name.official as string).localeCompare(a.name.official);
+
+        data.sort(asc);
 
         createTable(data);
 
@@ -34,15 +29,7 @@ fetch(`${API_URL}`)
             if(toggle.value === 'Ascending Mode'){
                 toggle.textContent = 'Descending Mode';
                 toggle.value = 'Descending Mode';
-                data.sort((a:any, b:any)=>{
-                    if(a.name.official > b.name.official){
-                        return 1;
-                    }
-                    if(a.name.official < b.name.official){
-                        return -1;
-                    }
-                    return 0;
-                });
+                data.sort(asc);
 
                 createTable(data);
 
@@ -50,15 +37,7 @@ fetch(`${API_URL}`)
                 toggle.textContent = 'Ascending Mode';
                 toggle.value = 'Ascending Mode';
 
-                data.sort((a:any, b:any)=>{
-                    if(b.name.official > a.name.official){
-                        return 1;
-                    }
-                    if(b.name.official < a.name.official){
-                        return -1;
-                    }
-                    return 0;
-                });
+                data.sort(des);
 
                 createTable(data);
             }
