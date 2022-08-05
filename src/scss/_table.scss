@@ -1,5 +1,9 @@
 .table{
     margin-top: 2rem;
+
+    &__country{
+        cursor: pointer;
+    }
 }
 
 table{
@@ -19,5 +23,6 @@ tbody{
     td{
         padding-top: 1rem;
         padding-bottom: 1rem;
+        text-align: center;
     }
 }

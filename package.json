@@ -21,6 +21,7 @@
     "webpack-dev-server": "^4.9.3"
   },
   "dependencies": {
-    "axios": "^0.27.2"
+    "axios": "^0.27.2",
+    "tingle.js": "^0.16.0"
   }
 }
