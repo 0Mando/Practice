@@ -536,6 +536,7 @@ __webpack_require__.r(__webpack_exports__);
 
 //* Variables
 var API_URL = "https://restcountries.com/v3.1/all";
+var WIKI_API = "https://en.wikipedia.org/api/rest_v1/page/summary/";
 var initialIndex = 0;
 var elementsPerPage = 25;
 //* Elements of document
@@ -586,6 +587,26 @@ fetch("".concat(API_URL))
             createTable(data);
         }
     });
+    next_btn.addEventListener('click', function (e) {
+        elementsPerPage += 25;
+        console.log(initialIndex);
+        console.log(elementsPerPage);
+        createTable(data);
+        if (elementsPerPage === 250) {
+            next_btn.disabled = true;
+            next_btn.style.cursor = "no-drop";
+        }
+    });
+    previous_btn.addEventListener('click', function (e) {
+        if (initialIndex === 0) {
+            previous_btn.disabled = true;
+            previous_btn.style.cursor = "no-drop";
+        }
+        else {
+            initialIndex -= 25;
+        }
+        createTable(data);
+    });
 });
 /**
  * Adds a button feature to the table row.
@@ -597,39 +618,39 @@ function addModalToRow() {
         var row = table.rows[index];
         row.addEventListener('click', function (e) {
             console.log('pressed');
-            var modal = new (_assets_tingle__WEBPACK_IMPORTED_MODULE_0___default().modal)({
-                footer: true,
-                stickyFooter: false,
-                closeMethods: ['overlay', 'button', 'escape'],
-                closeLabel: "Close",
-                cssClass: ['custom-class-1', 'custom-class-2'],
-                onOpen: function () {
-                    console.log('modal open');
-                },
-                onClose: function () {
-                    console.log('modal closed');
-                },
-                beforeClose: function () {
-                    // here's goes some logic
-                    // e.g. save content before closing the modal
-                    return true; // close the modal
-                    return false; // nothing happens
-                }
-            });
+            createModal();
         });
     }
+}
+function createModal() {
+    var modal = new (_assets_tingle__WEBPACK_IMPORTED_MODULE_0___default().modal)({
+        footer: true,
+        stickyFooter: false,
+        closeMethods: ['overlay', 'button', 'escape'],
+        closeLabel: "Close",
+        cssClass: ['custom-class-1', 'custom-class-2'],
+        onOpen: function () {
+            console.log('modal open');
+        },
+        onClose: function () {
+            console.log('modal closed');
+        },
+        beforeClose: function () {
+            // here's goes some logic
+            // e.g. save content before closing the modal
+            return true; // close the modal
+            return false; // nothing happens
+        }
+    });
+    fetch("".concat(WIKI_API))
+        .then(function (res) { return res.json(); })
+        .then(function (data) { return modal.setContent(data.extract); });
 }
 /**
  * Create the code to make the table in the document.
  * @param countries Information of countries.
  */
 function createTable(countries) {
-    next_btn.addEventListener('click', function (e) {
-        initialIndex = elementsPerPage;
-        elementsPerPage += 25;
-        console.log(initialIndex);
-        console.log(elementsPerPage);
-    });
     var body = '';
     for (var i = initialIndex; i < elementsPerPage; i++) {
         // Properties to display

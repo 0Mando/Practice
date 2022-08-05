@@ -62,6 +62,32 @@ fetch(`${API_URL}`)
                 createTable(data);
             }
         });
+
+        next_btn.addEventListener('click', (e)=>{
+            initialIndex = elementsPerPage;
+            elementsPerPage += 25;
+            console.log("next :"+initialIndex);
+            console.log("next :"+elementsPerPage);
+            createTable(data);
+            if(elementsPerPage === 250){
+                next_btn.disabled = true;
+                next_btn.style.cursor = "no-drop";
+            }
+        });
+
+        previous_btn.addEventListener('click',(e)=>{
+            if(initialIndex === 0){
+                initialIndex = 0;
+                previous_btn.disabled = true;
+                previous_btn.style.cursor = "no-drop";
+            }else{
+                initialIndex -= 25;
+                elementsPerPage -= 25;
+                createTable(data);
+                console.log("previous: "+initialIndex);
+                console.log("previous: "+elementsPerPage);
+            }
+        });
     });
 
 /**
@@ -113,12 +139,6 @@ function createModal(){
  */
 function createTable(countries:any):void{
 
-    next_btn.addEventListener('click', (e)=>{
-        initialIndex = elementsPerPage;
-        elementsPerPage += 25;
-        console.log(initialIndex);
-        console.log(elementsPerPage);
-    });
 
     let body:string = '';
 
