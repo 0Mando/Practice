@@ -11,6 +11,7 @@ let elementsPerPage: number = 25;
 const previous_btn = document.getElementById('previous') as HTMLButtonElement;
 const next_btn = document.getElementById('next') as HTMLButtonElement;
 const toggle = document.getElementById('toggle') as HTMLButtonElement;
+const search_bar = document.getElementById('search_bar') as HTMLInputElement;
 
 //* Consuming API
 fetch(`${API_URL}`)
@@ -66,8 +67,6 @@ fetch(`${API_URL}`)
         next_btn.addEventListener('click', (e)=>{
             initialIndex = elementsPerPage;
             elementsPerPage += 25;
-            console.log("next :"+initialIndex);
-            console.log("next :"+elementsPerPage);
             createTable(data);
             if(elementsPerPage === 250){
                 next_btn.disabled = true;
@@ -84,8 +83,6 @@ fetch(`${API_URL}`)
                 initialIndex -= 25;
                 elementsPerPage -= 25;
                 createTable(data);
-                console.log("previous: "+initialIndex);
-                console.log("previous: "+elementsPerPage);
             }
         });
     });
