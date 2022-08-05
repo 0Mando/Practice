@@ -1,5 +1,9 @@
 .table{
     margin-top: 2rem;
+
+    &__country{
+        cursor: pointer;
+    }
 }
 
 table{
