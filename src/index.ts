@@ -64,7 +64,31 @@ fetch(`${API_URL}`)
                 createTable(data);
             }
         });
+
+        searchByName(search_bar.value);
+
+        // search_bar.addEventListener('keyup',(e)=>{
+        //     const currentCountry = data.filter((d: { name: { official: string; }}) =>
+        //         `${d.name.official.toLowerCase()}`).includes(
+        //             search_bar.value.toLowerCase()
+        //         )
+        //     createTable(currentCountry);
+        // })
     });
+
+
+function searchByName(name:string){
+    search_bar.addEventListener('keyup', () =>{
+        fetch(`${API_URL + name}`)
+        .then(res => res.json())
+        .then(data =>{
+            createTable(data);
+        })
+    });
+}
+
+
+
 
 /**
  * Adds a button feature to the table row.
@@ -77,36 +101,37 @@ function addModalToRow(){
         let row = table.rows[index];
         row.addEventListener('click',(e)=>{
             console.log('pressed');
-            createModal();
+            
         })
     }
 }
 
-function createModal(){
-    let modal = new tingle.modal({
-        footer: true,
-        stickyFooter: false,
-        closeMethods: ['overlay', 'button', 'escape'],
-        closeLabel: "Close",
-        cssClass: ['custom-class-1', 'custom-class-2'],
-        onOpen: function() {
-            console.log('modal open');
-        },
-        onClose: function() {
-            console.log('modal closed');
-        },
-        beforeClose: function() {
-            // here's goes some logic
-            // e.g. save content before closing the modal
-            return true; // close the modal
-            return false; // nothing happens
-        }
-    });
+// !! On process...
+// function createModal(){
+//     let modal = new tingle.modal({
+//         footer: true,
+//         stickyFooter: false,
+//         closeMethods: ['overlay', 'button', 'escape'],
+//         closeLabel: "Close",
+//         cssClass: ['custom-class-1', 'custom-class-2'],
+//         onOpen: function() {
+//             console.log('modal open');
+//         },
+//         onClose: function() {
+//             console.log('modal closed');
+//         },
+//         beforeClose: function() {
+//             // here's goes some logic
+//             // e.g. save content before closing the modal
+//             return true; // close the modal
+//             return false; // nothing happens
+//         }
+//     });
 
-    fetch(`${WIKI_API}`)
-        .then(res => res.json())
-        .then(data => modal.setContent(data.extract))
-}
+//     fetch(`${WIKI_API}`)
+//         .then(res => res.json())
+//         .then(data => modal.setContent(data.extract))
+// }
 
 
 /**

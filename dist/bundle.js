@@ -543,54 +543,32 @@ var elementsPerPage = 25;
 var previous_btn = document.getElementById('previous');
 var next_btn = document.getElementById('next');
 var toggle = document.getElementById('toggle');
+var search_bar = document.getElementById('search_bar');
 //* Consuming API
 fetch("".concat(API_URL))
     .then(function (response) { return response.json(); })
     .then(function (data) {
-    data.sort(function (a, b) {
-        if (a.name.official > b.name.official) {
-            return 1;
-        }
-        if (a.name.official < b.name.official) {
-            return -1;
-        }
-        return 0;
-    });
+    var asc = function (a, b) { return a.name.official.localeCompare(b.name.official); };
+    var des = function (a, b) { return b.name.official.localeCompare(a.name.official); };
+    data.sort(asc);
     createTable(data);
     toggle.addEventListener('click', function (e) {
         if (toggle.value === 'Ascending Mode') {
             toggle.textContent = 'Descending Mode';
             toggle.value = 'Descending Mode';
-            data.sort(function (a, b) {
-                if (a.name.official > b.name.official) {
-                    return 1;
-                }
-                if (a.name.official < b.name.official) {
-                    return -1;
-                }
-                return 0;
-            });
+            data.sort(asc);
             createTable(data);
         }
         else if (toggle.value === 'Descending Mode') {
             toggle.textContent = 'Ascending Mode';
             toggle.value = 'Ascending Mode';
-            data.sort(function (a, b) {
-                if (b.name.official > a.name.official) {
-                    return 1;
-                }
-                if (b.name.official < a.name.official) {
-                    return -1;
-                }
-                return 0;
-            });
+            data.sort(des);
             createTable(data);
         }
     });
     next_btn.addEventListener('click', function (e) {
+        initialIndex = elementsPerPage;
         elementsPerPage += 25;
-        console.log(initialIndex);
-        console.log(elementsPerPage);
         createTable(data);
         if (elementsPerPage === 250) {
             next_btn.disabled = true;
@@ -599,13 +577,21 @@ fetch("".concat(API_URL))
     });
     previous_btn.addEventListener('click', function (e) {
         if (initialIndex === 0) {
+            initialIndex = 0;
             previous_btn.disabled = true;
             previous_btn.style.cursor = "no-drop";
         }
         else {
             initialIndex -= 25;
+            elementsPerPage -= 25;
+            createTable(data);
         }
-        createTable(data);
+    });
+    search_bar.addEventListener('keyup', function (e) {
+        var currentCountry = data.filter(function (d) {
+            return "".concat(d.name.official.toLowerCase(), " ").concat(d.capital.toLowerCase(), " ").concat(d.region.toLowerCase(), "\n                ").concat(d.languages.toLowerCase(), " ").concat(d.population.toLowerCase(), " ").concat(d.flag.toLowerCase());
+        }).includes(search_bar.value.toLowerCase());
+        createTable(currentCountry);
     });
 });
 /**
